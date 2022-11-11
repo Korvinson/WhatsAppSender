@@ -1,4 +1,4 @@
-# WhatsappMessage Sender
+# Whatsapp Message Sender
 
 You can send messages to unlimited number of people through this project.
 
