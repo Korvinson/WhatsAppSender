@@ -22,3 +22,5 @@ Pull requests are welcome.
 Please make sure to update tests as appropriate.
 
 ChromeDriver ver - 107
+
+Based on Selenium
