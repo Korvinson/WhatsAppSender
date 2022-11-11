@@ -6,11 +6,6 @@ You can send messages to unlimited number of people through this project.
 
 Exceptions are not handled properly. 
 
-## Things I'm Working on
-
- - CSV File instead of text File
- - Betterment of UI
-
 You need to have a text file with all your contact (separated by line) in following format
 ```
 1XXXXXXXXXX
