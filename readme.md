@@ -8,7 +8,7 @@ Exceptions are not handled properly.
 
 You need to have a text file with all your contact (separated by line) in following format
 ```
-1XXXXXXXXXX
+7XXXXXXXXXX
 ```
 Don't Use this format
 
