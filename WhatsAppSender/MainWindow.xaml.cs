@@ -82,24 +82,42 @@ namespace WhatsAppSender
                 messageBox.Text = File.ReadAllText(ofd.FileName);
             }
         }
+
+        private void SendButtonTelegramm_Click(object sender, RoutedEventArgs e)
+        {
+            
+
+        }
+
         private void SendButton_Click(object sender, RoutedEventArgs e)
         {
+
             
             if (!String.IsNullOrEmpty(messageBox.Text.Trim()))
             {
                 String message = Uri.EscapeDataString(messageBox.Text);
                 ChromeOptions options = new ChromeOptions();
-                options.BinaryLocation = "C:/Program Files/Google/Chrome/Application/chrome.exe";
+                
+                //options.BinaryLocation = "C:/Program Files/Google/Chrome/Application/chrome.exe";
                 options.AddUserProfilePreference("Paul Newman", @"C:/");
-                //options.AddArgument("--profile-directory=Profile_1");
+                options.AddArgument("--profile-directory=Profile_1");
                 options.AddArgument("--user-data-dir=C:/custom_profile");
+                //options.AddArgument("--headless=chrome");
+                //options.BrowserVersion = "107.0.5304.62";
+                //options.AddArgument("--disable-gpu");
+                options.AcceptInsecureCertificates = true;
+               
+                //options.AddArguments("window-size=1920x1080");
 
+                ChromeDriver driver = new ChromeDriver(@"c:/" ,options);
 
-                ChromeDriver driver = new ChromeDriver(options);
                 
                 driver.Navigate().GoToUrl("https://web.whatsapp.com/");
-                Thread.Sleep(10000);
-                var countSession = 0;
+                var page = driver.PageSource;
+                Thread.Sleep(15000);
+                var page2 = driver.PageSource;
+                //Screenshot screenshot = driver.GetScreenshot();
+                //screenshot.SaveAsFile("QR.png", System.Drawing.Imaging.ImageFormat.Png);
                 foreach (Contact i in contacts)
                 {
                     try
@@ -107,13 +125,15 @@ namespace WhatsAppSender
                         driver.ExecuteScript("window.open('');");
                         driver.SwitchTo().Window(driver.WindowHandles[1]);
                         driver.Navigate().GoToUrl("https://web.whatsapp.com/send?phone=" + i.ContactNumber + "&text=" + message + "&source&data&app_absent");
-
+                        Thread.Sleep(5000);
+                        var page3 = driver.PageSource;
                         try
                         {
                             WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
 
                             wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.CssSelector("._1Ae7k"))).Click();
-                            output.AppendText(i.ContactNumber+" Invalid Phone Number\n");
+                            
+                            output.AppendText(i.ContactNumber+" Its OK!\n");
                      
                         }
                         catch (Exception)
@@ -125,9 +145,10 @@ namespace WhatsAppSender
                         }
 
                         finally {
+                            Thread.Sleep(4000);
                             driver.SwitchTo().Window(driver.WindowHandles[1]);
-                            //driver.Close();
-                            //driver.SwitchTo().Window(driver.WindowHandles[0]);
+                            driver.Close();
+                            driver.SwitchTo().Window(driver.WindowHandles[0]);
                         }
                         
                         
@@ -142,8 +163,8 @@ namespace WhatsAppSender
 
 
                 //driver.Quit();
-                countSession++;
                 MessageBox.Show("Done Sending All Messages");
+                driver.Quit();
                 messageBox.Clear();
                 contacts.Clear();
             }
